@@ -1,0 +1,20 @@
+
+# GOOGLE SAMPLE PACKAGING DATA
+#
+# This file is used by Google as part of our samples packaging process.
+# End users may safely ignore this file. It has no relevance to other systems.
+---
+status:       PUBLISHED
+technologies: [Android]
+categories:   [Media, OpenGL]
+languages:    [Java]
+solutions:    [Mobile]
+github:       android/graphics
+level:        ADVANCED
+icon:         screenshots/icon-web.png
+apiRefs:
+    - android:android.media.effect.Effect
+    - android:android.media.effect.EffectContext
+    - android:android.media.effect.EffectFactory
+    - android:android.opengl.GLSurfaceView
+license: apache2
