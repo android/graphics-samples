@@ -6,7 +6,7 @@
 ---
 status:       PUBLISHED
 technologies: [Android]
-categories:   [UI, Graphics]
+categories:   [Graphics]
 languages:    [Kotlin]
 solutions:    [Mobile]
 github:       android-PdfRendererBasic
