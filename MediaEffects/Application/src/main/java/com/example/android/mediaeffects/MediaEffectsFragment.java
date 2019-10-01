@@ -26,8 +26,8 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -66,7 +66,7 @@ public class MediaEffectsFragment extends Fragment implements GLSurfaceView.Rend
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mEffectView = (GLSurfaceView) view.findViewById(R.id.effectsview);
+        mEffectView = view.findViewById(R.id.effectsview);
         mEffectView.setEGLContextClientVersion(2);
         mEffectView.setRenderer(this);
         mEffectView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
