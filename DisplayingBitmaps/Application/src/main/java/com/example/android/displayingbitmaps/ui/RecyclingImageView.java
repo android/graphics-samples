@@ -20,7 +20,8 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 import com.example.android.displayingbitmaps.util.RecyclingBitmapDrawable;
 
@@ -28,7 +29,7 @@ import com.example.android.displayingbitmaps.util.RecyclingBitmapDrawable;
  * Sub-class of ImageView which automatically notifies the drawable when it is
  * being displayed.
  */
-public class RecyclingImageView extends ImageView {
+public class RecyclingImageView extends AppCompatImageView {
 
     public RecyclingImageView(Context context) {
         super(context);
@@ -69,9 +70,6 @@ public class RecyclingImageView extends ImageView {
 
     /**
      * Notifies the drawable that it's displayed state has changed.
-     *
-     * @param drawable
-     * @param isDisplayed
      */
     private static void notifyDrawable(Drawable drawable, final boolean isDisplayed) {
         if (drawable instanceof RecyclingBitmapDrawable) {

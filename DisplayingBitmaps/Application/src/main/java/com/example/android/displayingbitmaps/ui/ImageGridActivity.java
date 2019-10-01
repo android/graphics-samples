@@ -17,17 +17,17 @@
 package com.example.android.displayingbitmaps.ui;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.android.displayingbitmaps.BuildConfig;
+import com.example.android.displayingbitmaps.R;
 import com.example.android.displayingbitmaps.util.Utils;
 
 /**
  * Simple FragmentActivity to hold the main {@link ImageGridFragment} and not much else.
  */
-public class ImageGridActivity extends FragmentActivity {
-    private static final String TAG = "ImageGridActivity";
+public class ImageGridActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +35,14 @@ public class ImageGridActivity extends FragmentActivity {
             Utils.enableStrictMode();
         }
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.image_grid_activity);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        if (getSupportFragmentManager().findFragmentByTag(TAG) == null) {
-            final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.add(android.R.id.content, new ImageGridFragment(), TAG);
-            ft.commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content, new ImageGridFragment())
+                    .commitNow();
         }
     }
 }

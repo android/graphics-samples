@@ -23,13 +23,16 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.StatFs;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.util.LruCache;
+
+import androidx.annotation.NonNull;
+import androidx.collection.LruCache;
+import androidx.core.graphics.BitmapCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.android.common.logger.Log;
 import com.example.android.displayingbitmaps.BuildConfig;
@@ -51,9 +54,10 @@ import java.util.Set;
 /**
  * This class handles disk and memory caching of bitmaps in conjunction with the
  * {@link ImageWorker} class and its subclasses. Use
- * {@link ImageCache#getInstance(android.support.v4.app.FragmentManager, ImageCacheParams)} to get an instance of this
- * class, although usually a cache should be added directly to an {@link ImageWorker} by calling
- * {@link ImageWorker#addImageCache(android.support.v4.app.FragmentManager, ImageCacheParams)}.
+ * {@link ImageCache#getInstance(FragmentManager, ImageCacheParams)} to get
+ * an instance of this class, although usually a cache should be added directly to an
+ * {@link ImageWorker} by calling
+ * {@link ImageWorker#addImageCache(FragmentManager, ImageCacheParams)}.
  */
 public class ImageCache {
     private static final String TAG = "ImageCache";
@@ -85,8 +89,8 @@ public class ImageCache {
     /**
      * Create a new ImageCache object using the specified parameters. This should not be
      * called directly by other classes, instead use
-     * {@link ImageCache#getInstance(android.support.v4.app.FragmentManager, ImageCacheParams)} to fetch an ImageCache
-     * instance.
+     * {@link ImageCache#getInstance(FragmentManager, ImageCacheParams)} to
+     * fetch an ImageCache instance.
      *
      * @param cacheParams The cache parameters to use to initialize the cache
      */
@@ -99,7 +103,7 @@ public class ImageCache {
      * ImageCache object across configuration changes such as a change in device orientation.
      *
      * @param fragmentManager The fragment manager to use when dealing with the retained fragment.
-     * @param cacheParams The cache parameters to use if the ImageCache needs instantiation.
+     * @param cacheParams     The cache parameters to use if the ImageCache needs instantiation.
      * @return An existing retained ImageCache object or a new one if one did not exist
      */
     public static ImageCache getInstance(
@@ -144,10 +148,8 @@ public class ImageCache {
             // require knowledge of the expected size of the bitmaps. From Honeycomb to JellyBean
             // the size would need to be precise, from KitKat onward the size would just need to
             // be the upper bound (due to changes in how inBitmap can re-use bitmaps).
-            if (Utils.hasHoneycomb()) {
-                mReusableBitmaps =
-                        Collections.synchronizedSet(new HashSet<SoftReference<Bitmap>>());
-            }
+            mReusableBitmaps =
+                    Collections.synchronizedSet(new HashSet<SoftReference<Bitmap>>());
 
             mMemoryCache = new LruCache<String, BitmapDrawable>(mCacheParams.memCacheSize) {
 
@@ -155,20 +157,21 @@ public class ImageCache {
                  * Notify the removed entry that is no longer being cached
                  */
                 @Override
-                protected void entryRemoved(boolean evicted, String key,
-                        BitmapDrawable oldValue, BitmapDrawable newValue) {
-                    if (RecyclingBitmapDrawable.class.isInstance(oldValue)) {
+                protected void entryRemoved(
+                        boolean evicted,
+                        @NonNull String key,
+                        @NonNull BitmapDrawable oldValue,
+                        BitmapDrawable newValue
+                ) {
+                    if (oldValue instanceof RecyclingBitmapDrawable) {
                         // The removed entry is a recycling drawable, so notify it
                         // that it has been removed from the memory cache
                         ((RecyclingBitmapDrawable) oldValue).setIsCached(false);
                     } else {
-                        // The removed entry is a standard BitmapDrawable
-
-                        if (Utils.hasHoneycomb()) {
-                            // We're running on Honeycomb or later, so add the bitmap
-                            // to a SoftReference set for possible use with inBitmap later
-                            mReusableBitmaps.add(new SoftReference<Bitmap>(oldValue.getBitmap()));
-                        }
+                        // The removed entry is a standard BitmapDrawable.
+                        // Add the bitmap to a SoftReference set for possible use with inBitmap
+                        // later.
+                        mReusableBitmaps.add(new SoftReference<>(oldValue.getBitmap()));
                     }
                 }
 
@@ -177,7 +180,7 @@ public class ImageCache {
                  * for a bitmap cache
                  */
                 @Override
-                protected int sizeOf(String key, BitmapDrawable value) {
+                protected int sizeOf(@NonNull String key, @NonNull BitmapDrawable value) {
                     final int bitmapSize = getBitmapSize(value) / 1024;
                     return bitmapSize == 0 ? 1 : bitmapSize;
                 }
@@ -208,7 +211,7 @@ public class ImageCache {
                     if (!diskCacheDir.exists()) {
                         diskCacheDir.mkdirs();
                     }
-                    if (getUsableSpace(diskCacheDir) > mCacheParams.diskCacheSize) {
+                    if (diskCacheDir.getUsableSpace() > mCacheParams.diskCacheSize) {
                         try {
                             mDiskLruCache = DiskLruCache.open(
                                     diskCacheDir, 1, 1, mCacheParams.diskCacheSize);
@@ -229,7 +232,8 @@ public class ImageCache {
 
     /**
      * Adds a bitmap to both memory and disk cache.
-     * @param data Unique identifier for the bitmap to store
+     *
+     * @param data  Unique identifier for the bitmap to store
      * @param value The bitmap drawable to store
      */
     public void addBitmapToCache(String data, BitmapDrawable value) {
@@ -240,7 +244,7 @@ public class ImageCache {
 
         // Add to memory cache
         if (mMemoryCache != null) {
-            if (RecyclingBitmapDrawable.class.isInstance(value)) {
+            if (value instanceof RecyclingBitmapDrawable) {
                 // The removed entry is a recycling drawable, so notify it
                 // that it has been added into the memory cache
                 ((RecyclingBitmapDrawable) value).setIsCached(true);
@@ -276,7 +280,8 @@ public class ImageCache {
                         if (out != null) {
                             out.close();
                         }
-                    } catch (IOException e) {}
+                    } catch (IOException e) {
+                    }
                 }
             }
         }
@@ -320,7 +325,8 @@ public class ImageCache {
             while (mDiskCacheStarting) {
                 try {
                     mDiskCacheLock.wait();
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                }
             }
             if (mDiskLruCache != null) {
                 InputStream inputStream = null;
@@ -347,7 +353,8 @@ public class ImageCache {
                         if (inputStream != null) {
                             inputStream.close();
                         }
-                    } catch (IOException e) {}
+                    } catch (IOException e) {
+                    }
                 }
             }
             return bitmap;
@@ -477,9 +484,10 @@ public class ImageCache {
 
         /**
          * Create a set of image cache parameters that can be provided to
-         * {@link ImageCache#getInstance(android.support.v4.app.FragmentManager, ImageCacheParams)} or
-         * {@link ImageWorker#addImageCache(android.support.v4.app.FragmentManager, ImageCacheParams)}.
-         * @param context A context to use.
+         * {@link ImageCache#getInstance(FragmentManager, ImageCacheParams)} or
+         * {@link ImageWorker#addImageCache(FragmentManager, ImageCacheParams)}.
+         *
+         * @param context                A context to use.
          * @param diskCacheDirectoryName A unique subdirectory name that will be appended to the
          *                               application cache directory. Usually "cache" or "images"
          *                               is sufficient.
@@ -494,7 +502,7 @@ public class ImageCache {
          * memory. Throws {@link IllegalArgumentException} if percent is < 0.01 or > .8.
          * memCacheSize is stored in kilobytes instead of bytes as this will eventually be passed
          * to construct a LruCache which takes an int in its constructor.
-         *
+         * <p>
          * This value should be chosen carefully based on a number of factors
          * Refer to the corresponding Android Training class for more discussion:
          * http://developer.android.com/training/displaying-bitmaps/
@@ -511,16 +519,16 @@ public class ImageCache {
     }
 
     /**
-     * @param candidate - Bitmap to check
+     * @param candidate     - Bitmap to check
      * @param targetOptions - Options that have the out* value populated
      * @return true if <code>candidate</code> can be used for inBitmap re-use with
-     *      <code>targetOptions</code>
+     * <code>targetOptions</code>
      */
     @TargetApi(VERSION_CODES.KITKAT)
     private static boolean canUseForInBitmap(
             Bitmap candidate, BitmapFactory.Options targetOptions) {
         //BEGIN_INCLUDE(can_use_for_inbitmap)
-        if (!Utils.hasKitKat()) {
+        if (Build.VERSION.SDK_INT < VERSION_CODES.KITKAT) {
             // On earlier versions, the dimensions must match exactly and the inSampleSize must be 1
             return candidate.getWidth() == targetOptions.outWidth
                     && candidate.getHeight() == targetOptions.outHeight
@@ -538,6 +546,7 @@ public class ImageCache {
 
     /**
      * Return the byte usage per pixel of a bitmap based on its configuration.
+     *
      * @param config The bitmap configuration.
      * @return The byte usage per pixel.
      */
@@ -557,7 +566,7 @@ public class ImageCache {
     /**
      * Get a usable cache directory (external if available, internal otherwise).
      *
-     * @param context The context to use
+     * @param context    The context to use
      * @param uniqueName A unique directory name to append to the cache dir
      * @return The cache dir
      */
@@ -566,8 +575,9 @@ public class ImageCache {
         // otherwise use internal cache dir
         final String cachePath =
                 Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) ||
-                        !isExternalStorageRemovable() ? getExternalCacheDir(context).getPath() :
-                                context.getCacheDir().getPath();
+                        !Environment.isExternalStorageRemovable() ?
+                        context.getExternalCacheDir().getPath() :
+                        context.getCacheDir().getPath();
 
         return new File(cachePath + File.separator + uniqueName);
     }
@@ -591,8 +601,8 @@ public class ImageCache {
     private static String bytesToHexString(byte[] bytes) {
         // http://stackoverflow.com/questions/332079
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < bytes.length; i++) {
-            String hex = Integer.toHexString(0xFF & bytes[i]);
+        for (byte b : bytes) {
+            String hex = Integer.toHexString(0xFF & b);
             if (hex.length() == 1) {
                 sb.append('0');
             }
@@ -605,72 +615,9 @@ public class ImageCache {
      * Get the size in bytes of a bitmap in a BitmapDrawable. Note that from Android 4.4 (KitKat)
      * onward this returns the allocated memory size of the bitmap which can be larger than the
      * actual bitmap data byte count (in the case it was re-used).
-     *
-     * @param value
-     * @return size in bytes
      */
-    @TargetApi(VERSION_CODES.KITKAT)
-    public static int getBitmapSize(BitmapDrawable value) {
-        Bitmap bitmap = value.getBitmap();
-
-        // From KitKat onward use getAllocationByteCount() as allocated bytes can potentially be
-        // larger than bitmap byte count.
-        if (Utils.hasKitKat()) {
-            return bitmap.getAllocationByteCount();
-        }
-
-        if (Utils.hasHoneycombMR1()) {
-            return bitmap.getByteCount();
-        }
-
-        // Pre HC-MR1
-        return bitmap.getRowBytes() * bitmap.getHeight();
-    }
-
-    /**
-     * Check if external storage is built-in or removable.
-     *
-     * @return True if external storage is removable (like an SD card), false
-     *         otherwise.
-     */
-    @TargetApi(VERSION_CODES.GINGERBREAD)
-    public static boolean isExternalStorageRemovable() {
-        if (Utils.hasGingerbread()) {
-            return Environment.isExternalStorageRemovable();
-        }
-        return true;
-    }
-
-    /**
-     * Get the external app cache directory.
-     *
-     * @param context The context to use
-     * @return The external cache dir
-     */
-    @TargetApi(VERSION_CODES.FROYO)
-    public static File getExternalCacheDir(Context context) {
-        if (Utils.hasFroyo()) {
-            return context.getExternalCacheDir();
-        }
-
-        // Before Froyo we need to construct the external cache dir ourselves
-        final String cacheDir = "/Android/data/" + context.getPackageName() + "/cache/";
-        return new File(Environment.getExternalStorageDirectory().getPath() + cacheDir);
-    }
-
-    /**
-     * Check how much usable space is available at a given path.
-     *
-     * @param path The path to check
-     * @return The space available in bytes
-     */
-    @TargetApi(VERSION_CODES.GINGERBREAD)
-    public static long getUsableSpace(File path) {
-        if (Utils.hasGingerbread()) {
-            return path.getUsableSpace();
-        }
-        final StatFs stats = new StatFs(path.getPath());
-        return (long) stats.getBlockSize() * (long) stats.getAvailableBlocks();
+    private static int getBitmapSize(BitmapDrawable value) {
+        return BitmapCompat.getAllocationByteCount(value.getBitmap());
     }
 
     /**
@@ -679,7 +626,7 @@ public class ImageCache {
      *
      * @param fm The FragmentManager manager to use.
      * @return The existing instance of the Fragment or the new instance if just
-     *         created.
+     * created.
      */
     private static RetainFragment findOrCreateRetainFragment(FragmentManager fm) {
         //BEGIN_INCLUDE(find_create_retain_fragment)
@@ -706,7 +653,8 @@ public class ImageCache {
         /**
          * Empty constructor as per the Fragment documentation
          */
-        public RetainFragment() {}
+        public RetainFragment() {
+        }
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -721,7 +669,7 @@ public class ImageCache {
          *
          * @param object The object to store
          */
-        public void setObject(Object object) {
+        void setObject(Object object) {
             mObject = object;
         }
 
@@ -730,7 +678,7 @@ public class ImageCache {
          *
          * @return The stored object
          */
-        public Object getObject() {
+        Object getObject() {
             return mObject;
         }
     }

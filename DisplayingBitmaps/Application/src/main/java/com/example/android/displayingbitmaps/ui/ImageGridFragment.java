@@ -17,13 +17,11 @@
 package com.example.android.displayingbitmaps.ui;
 
 import android.annotation.TargetApi;
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,13 +37,16 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.fragment.app.Fragment;
+
 import com.example.android.common.logger.Log;
 import com.example.android.displayingbitmaps.BuildConfig;
 import com.example.android.displayingbitmaps.R;
 import com.example.android.displayingbitmaps.provider.Images;
 import com.example.android.displayingbitmaps.util.ImageCache;
 import com.example.android.displayingbitmaps.util.ImageFetcher;
-import com.example.android.displayingbitmaps.util.Utils;
 
 /**
  * The main fragment that powers the ImageGridActivity screen. Fairly straight forward GridView
@@ -66,7 +67,8 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
     /**
      * Empty constructor as per the Fragment documentation
      */
-    public ImageGridFragment() {}
+    public ImageGridFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,7 +96,7 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View v = inflater.inflate(R.layout.image_grid_fragment, container, false);
-        final GridView mGridView = (GridView) v.findViewById(R.id.gridView);
+        final GridView mGridView = v.findViewById(R.id.gridView);
         mGridView.setAdapter(mAdapter);
         mGridView.setOnItemClickListener(this);
         mGridView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -103,9 +105,7 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
                 // Pause fetcher to ensure smoother scrolling when flinging
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
                     // Before Honeycomb pause image loading on scroll to help with performance
-                    if (!Utils.hasHoneycomb()) {
-                        mImageFetcher.setPauseWork(true);
-                    }
+                    mImageFetcher.setPauseWork(true);
                 } else {
                     mImageFetcher.setPauseWork(false);
                 }
@@ -113,7 +113,7 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
 
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem,
-                    int visibleItemCount, int totalItemCount) {
+                                 int visibleItemCount, int totalItemCount) {
             }
         });
 
@@ -137,7 +137,8 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
                                 if (BuildConfig.DEBUG) {
                                     Log.d(TAG, "onCreateView - numColumns set to " + numColumns);
                                 }
-                                if (Utils.hasJellyBean()) {
+                                mGridView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                if (Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN) {
                                     mGridView.getViewTreeObserver()
                                             .removeOnGlobalLayoutListener(this);
                                 } else {
@@ -178,93 +179,70 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         final Intent i = new Intent(getActivity(), ImageDetailActivity.class);
         i.putExtra(ImageDetailActivity.EXTRA_IMAGE, (int) id);
-        if (Utils.hasJellyBean()) {
-            // makeThumbnailScaleUpAnimation() looks kind of ugly here as the loading spinner may
-            // show plus the thumbnail image in GridView is cropped. so using
-            // makeScaleUpAnimation() instead.
-            ActivityOptions options =
-                    ActivityOptions.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight());
-            getActivity().startActivity(i, options.toBundle());
-        } else {
-            startActivity(i);
-        }
+        // makeThumbnailScaleUpAnimation() looks kind of ugly here as the loading spinner may
+        // show plus the thumbnail image in GridView is cropped. so using
+        // makeScaleUpAnimation() instead.
+        startActivity(i, ActivityOptionsCompat
+                .makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight())
+                .toBundle());
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main_menu, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.clear_cache:
-                mImageFetcher.clearCache();
-                Toast.makeText(getActivity(), R.string.clear_cache_complete_toast,
-                        Toast.LENGTH_SHORT).show();
-                return true;
+        if (item.getItemId() == R.id.clear_cache) {
+            mImageFetcher.clearCache();
+            Toast.makeText(getActivity(), R.string.clear_cache_complete_toast,
+                    Toast.LENGTH_SHORT).show();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     /**
-     * The main adapter that backs the GridView. This is fairly standard except the number of
-     * columns in the GridView is used to create a fake top row of empty views as we use a
-     * transparent ActionBar and don't want the real top row of images to start off covered by it.
+     * The main adapter that backs the GridView.
      */
     private class ImageAdapter extends BaseAdapter {
 
         private final Context mContext;
         private int mItemHeight = 0;
         private int mNumColumns = 0;
-        private int mActionBarHeight = 0;
         private GridView.LayoutParams mImageViewLayoutParams;
 
-        public ImageAdapter(Context context) {
+        ImageAdapter(Context context) {
             super();
             mContext = context;
             mImageViewLayoutParams = new GridView.LayoutParams(
                     LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-            // Calculate ActionBar height
-            TypedValue tv = new TypedValue();
-            if (context.getTheme().resolveAttribute(
-                    android.R.attr.actionBarSize, tv, true)) {
-                mActionBarHeight = TypedValue.complexToDimensionPixelSize(
-                        tv.data, context.getResources().getDisplayMetrics());
-            }
         }
 
         @Override
         public int getCount() {
-            // If columns have yet to be determined, return no items
-            if (getNumColumns() == 0) {
-                return 0;
-            }
-
-            // Size + number of columns for top empty row
-            return Images.imageThumbUrls.length + mNumColumns;
+            return Images.imageThumbUrls.length;
         }
 
         @Override
         public Object getItem(int position) {
-            return position < mNumColumns ?
-                    null : Images.imageThumbUrls[position - mNumColumns];
+            return Images.imageThumbUrls[position];
         }
 
         @Override
         public long getItemId(int position) {
-            return position < mNumColumns ? 0 : position - mNumColumns;
+            return position;
         }
 
         @Override
         public int getViewTypeCount() {
-            // Two types of views, the normal ImageView and the top row of empty views
-            return 2;
+            return 1;
         }
 
         @Override
         public int getItemViewType(int position) {
-            return (position < mNumColumns) ? 1 : 0;
+            return 0;
         }
 
         @Override
@@ -275,18 +253,8 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
         @Override
         public View getView(int position, View convertView, ViewGroup container) {
             //BEGIN_INCLUDE(load_gridview_item)
-            // First check if this is the top row
-            if (position < mNumColumns) {
-                if (convertView == null) {
-                    convertView = new View(mContext);
-                }
-                // Set empty view with height of ActionBar
-                convertView.setLayoutParams(new AbsListView.LayoutParams(
-                        LayoutParams.MATCH_PARENT, mActionBarHeight));
-                return convertView;
-            }
 
-            // Now handle the main ImageView thumbnails
+            // ImageView thumbnail
             ImageView imageView;
             if (convertView == null) { // if it's not recycled, instantiate and initialize
                 imageView = new RecyclingImageView(mContext);
@@ -303,7 +271,7 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
 
             // Finally load the image asynchronously into the ImageView, this also takes care of
             // setting a placeholder image while the background thread runs
-            mImageFetcher.loadImage(Images.imageThumbUrls[position - mNumColumns], imageView);
+            mImageFetcher.loadImage(Images.imageThumbUrls[position], imageView);
             return imageView;
             //END_INCLUDE(load_gridview_item)
         }
@@ -312,9 +280,9 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
          * Sets the item height. Useful for when we know the column width so the height can be set
          * to match.
          *
-         * @param height
+         * @param height The item height in pixel
          */
-        public void setItemHeight(int height) {
+        void setItemHeight(int height) {
             if (height == mItemHeight) {
                 return;
             }
@@ -325,11 +293,11 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
             notifyDataSetChanged();
         }
 
-        public void setNumColumns(int numColumns) {
+        void setNumColumns(int numColumns) {
             mNumColumns = numColumns;
         }
 
-        public int getNumColumns() {
+        int getNumColumns() {
             return mNumColumns;
         }
     }
