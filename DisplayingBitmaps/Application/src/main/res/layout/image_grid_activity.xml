@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2012 The Android Open Source Project
+  Copyright (C) 2019 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -14,17 +14,21 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<GridView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/gridView"
+    android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:columnWidth="@dimen/image_thumbnail_size"
-    android:drawSelectorOnTop="true"
-    android:horizontalSpacing="@dimen/image_thumbnail_spacing"
-    android:listSelector="@drawable/photogrid_list_selector"
-    android:numColumns="auto_fit"
-    android:paddingTop="?attr/actionBarSize"
-    android:stretchMode="columnWidth"
-    android:verticalSpacing="@dimen/image_thumbnail_spacing" />
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize" />
+
+</FrameLayout>

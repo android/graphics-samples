@@ -20,12 +20,13 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import android.widget.ImageView;
 
 import com.example.android.common.logger.Log;
@@ -65,7 +66,7 @@ public abstract class ImageWorker {
      * Load an image specified by the data parameter into an ImageView (override
      * {@link ImageWorker#processBitmap(Object)} to define the processing logic). A memory and
      * disk cache will be used if an {@link ImageCache} has been added using
-     * {@link ImageWorker#addImageCache(android.support.v4.app.FragmentManager, ImageCache.ImageCacheParams)}. If the
+     * {@link ImageWorker#addImageCache(FragmentManager, ImageCache.ImageCacheParams)}. If the
      * image is found in the memory cache, it is set immediately, otherwise an {@link AsyncTask}
      * will be created to asynchronously load the bitmap.
      *
@@ -109,7 +110,7 @@ public abstract class ImageWorker {
      * Load an image specified by the data parameter into an ImageView (override
      * {@link ImageWorker#processBitmap(Object)} to define the processing logic). A memory and
      * disk cache will be used if an {@link ImageCache} has been added using
-     * {@link ImageWorker#addImageCache(android.support.v4.app.FragmentManager, ImageCache.ImageCacheParams)}. If the
+     * {@link ImageWorker#addImageCache(FragmentManager, ImageCache.ImageCacheParams)}. If the
      * image is found in the memory cache, it is set immediately, otherwise an {@link AsyncTask}
      * will be created to asynchronously load the bitmap.
      *
@@ -317,14 +318,7 @@ public abstract class ImageWorker {
             // here, if it was, and the thread is still running, we may as well add the processed
             // bitmap to our cache as it might be used again in the future
             if (bitmap != null) {
-                if (Utils.hasHoneycomb()) {
-                    // Running on Honeycomb or newer, so wrap in a standard BitmapDrawable
-                    drawable = new BitmapDrawable(mResources, bitmap);
-                } else {
-                    // Running on Gingerbread or older, so wrap in a RecyclingBitmapDrawable
-                    // which will recycle automagically
-                    drawable = new RecyclingBitmapDrawable(mResources, bitmap);
-                }
+                drawable = new BitmapDrawable(mResources, bitmap);
 
                 if (mImageCache != null) {
                     mImageCache.addBitmapToCache(dataString, drawable);
@@ -434,7 +428,7 @@ public abstract class ImageWorker {
             // Transition drawable with a transparent drawable and the final drawable
             final TransitionDrawable td =
                     new TransitionDrawable(new Drawable[] {
-                            new ColorDrawable(android.R.color.transparent),
+                            new ColorDrawable(Color.TRANSPARENT),
                             drawable
                     });
             // Set background to loading bitmap

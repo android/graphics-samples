@@ -20,7 +20,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.widget.Toast;
 
 import com.example.android.common.logger.Log;
@@ -91,7 +90,7 @@ public class ImageFetcher extends ImageResizer {
             mHttpCacheDir.mkdirs();
         }
         synchronized (mHttpDiskCacheLock) {
-            if (ImageCache.getUsableSpace(mHttpCacheDir) > HTTP_CACHE_SIZE) {
+            if (mHttpCacheDir.getUsableSpace() > HTTP_CACHE_SIZE) {
                 try {
                     mHttpDiskCache = DiskLruCache.open(mHttpCacheDir, 1, 1, HTTP_CACHE_SIZE);
                     if (BuildConfig.DEBUG) {
@@ -264,7 +263,6 @@ public class ImageFetcher extends ImageResizer {
      * @return true if successful, false otherwise
      */
     public boolean downloadUrlToStream(String urlString, OutputStream outputStream) {
-        disableConnectionReuseIfNecessary();
         HttpURLConnection urlConnection = null;
         BufferedOutputStream out = null;
         BufferedInputStream in = null;
@@ -296,16 +294,5 @@ public class ImageFetcher extends ImageResizer {
             } catch (final IOException e) {}
         }
         return false;
-    }
-
-    /**
-     * Workaround for bug pre-Froyo, see here for more info:
-     * http://android-developers.blogspot.com/2011/09/androids-http-clients.html
-     */
-    public static void disableConnectionReuseIfNecessary() {
-        // HTTP connection reuse which was buggy pre-froyo
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
-            System.setProperty("http.keepAlive", "false");
-        }
     }
 }

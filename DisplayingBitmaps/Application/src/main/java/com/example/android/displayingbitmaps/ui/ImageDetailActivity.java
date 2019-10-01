@@ -16,16 +16,7 @@
 
 package com.example.android.displayingbitmaps.ui;
 
-import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.NavUtils;
-import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +25,16 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NavUtils;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.example.android.displayingbitmaps.BuildConfig;
 import com.example.android.displayingbitmaps.R;
 import com.example.android.displayingbitmaps.provider.Images;
@@ -41,22 +42,22 @@ import com.example.android.displayingbitmaps.util.ImageCache;
 import com.example.android.displayingbitmaps.util.ImageFetcher;
 import com.example.android.displayingbitmaps.util.Utils;
 
-public class ImageDetailActivity extends FragmentActivity implements OnClickListener {
+public class ImageDetailActivity extends AppCompatActivity implements OnClickListener {
     private static final String IMAGE_CACHE_DIR = "images";
     public static final String EXTRA_IMAGE = "extra_image";
 
-    private ImagePagerAdapter mAdapter;
     private ImageFetcher mImageFetcher;
     private ViewPager mPager;
 
-    @TargetApi(VERSION_CODES.HONEYCOMB)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         if (BuildConfig.DEBUG) {
             Utils.enableStrictMode();
         }
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.image_detail_pager);
+        setContentView(R.layout.image_detail_activity);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         // Fetch screen height and width, to use as our max size when loading images as this
         // activity runs full screen
@@ -82,8 +83,11 @@ public class ImageDetailActivity extends FragmentActivity implements OnClickList
         mImageFetcher.setImageFadeIn(false);
 
         // Set up ViewPager and backing adapter
-        mAdapter = new ImagePagerAdapter(getSupportFragmentManager(), Images.imageUrls.length);
-        mPager = (ViewPager) findViewById(R.id.pager);
+        ImagePagerAdapter mAdapter = new ImagePagerAdapter(
+                getSupportFragmentManager(),
+                Images.imageUrls.length
+        );
+        mPager = findViewById(R.id.pager);
         mPager.setAdapter(mAdapter);
         mPager.setPageMargin((int) getResources().getDimension(R.dimen.horizontal_page_margin));
         mPager.setOffscreenPageLimit(2);
@@ -93,10 +97,10 @@ public class ImageDetailActivity extends FragmentActivity implements OnClickList
 
         // Enable some additional newer visibility and ActionBar features to create a more
         // immersive photo viewing experience
-        if (Utils.hasHoneycomb()) {
-            final ActionBar actionBar = getActionBar();
+        final ActionBar actionBar = getSupportActionBar();
 
-            // Hide title text and set home as up
+        // Hide title text and set home as up
+        if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -153,7 +157,7 @@ public class ImageDetailActivity extends FragmentActivity implements OnClickList
             case R.id.clear_cache:
                 mImageFetcher.clearCache();
                 Toast.makeText(
-                        this, R.string.clear_cache_complete_toast,Toast.LENGTH_SHORT).show();
+                        this, R.string.clear_cache_complete_toast, Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -180,8 +184,8 @@ public class ImageDetailActivity extends FragmentActivity implements OnClickList
     private class ImagePagerAdapter extends FragmentStatePagerAdapter {
         private final int mSize;
 
-        public ImagePagerAdapter(FragmentManager fm, int size) {
-            super(fm);
+        ImagePagerAdapter(FragmentManager fm, int size) {
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
             mSize = size;
         }
 
@@ -190,6 +194,7 @@ public class ImageDetailActivity extends FragmentActivity implements OnClickList
             return mSize;
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             return ImageDetailFragment.newInstance(Images.imageUrls[position]);
@@ -200,7 +205,6 @@ public class ImageDetailActivity extends FragmentActivity implements OnClickList
      * Set on the ImageView in the ViewPager children fragments, to enable/disable low profile mode
      * when the ImageView is touched.
      */
-    @TargetApi(VERSION_CODES.HONEYCOMB)
     @Override
     public void onClick(View v) {
         final int vis = mPager.getSystemUiVisibility();
