@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   Copyright 2013 The Android Open Source Project
 
@@ -12,12 +13,12 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
-  -->
-
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:ignore="AppCompatResource">
-    <item android:id="@+id/menu_toggle_log"
-          android:showAsAction="always"
-          android:title="@string/sample_show_log" />
+-->
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_toggle_log"
+        android:title="@string/sample_show_log"
+        app:showAsAction="always" />
 </menu>

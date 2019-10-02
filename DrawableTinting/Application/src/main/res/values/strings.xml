@@ -14,15 +14,35 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-
 <resources>
+    <string name="app_name">DrawableTinting</string>
+    <string name="intro_message">
+        <![CDATA[
+
+
+            Sample that shows applying tinting and color filters to Drawables both programmatically
+            and as Drawable resources in XML.
+            \n\nTinting is set on a nine-patch drawable through the "tint" and "tintMode" parameters.
+            A color state list is referenced as the tint color, which defines colors for different
+            states of a View (for example disabled/enabled, focused, pressed or selected).
+            \n\nProgrammatically, tinting is applied to a Drawable through its "setColorFilter" method,
+            with a reference to a color and a PorterDuff blend mode. The color and blend mode can be
+            changed from the UI to see the effect of different options.
+
+
+        ]]>
+    </string>
+
+    <string name="sample_show_log">Show Log</string>
+    <string name="sample_hide_log">Hide Log</string>
+
     <string name="resource_tint_label">Button with tinting set by state color list as resource:</string>
     <string name="resource_tint_button">Tinting set by StateDrawable</string>
     <string name="prog_tint_label">View with tinting set programmatically:</string>
-    <string name="value_alpha">Alpha: %d\%</string>
-    <string name="value_red">Red: %d\%</string>
-    <string name="value_green">Green: %d\%</string>
-    <string name="value_blue">Blue: %d\%</string>
+    <string name="value_alpha">Alpha: %d</string>
+    <string name="value_red">Red: %d</string>
+    <string name="value_green">Green: %d</string>
+    <string name="value_blue">Blue: %d</string>
     <string name="blend_mode_label">Blend Mode:</string>
 
     <string-array name="blend_modes">

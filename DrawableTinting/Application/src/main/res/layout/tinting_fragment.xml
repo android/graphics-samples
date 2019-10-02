@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright 2014 The Android Open Source Project
 
@@ -13,18 +14,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/vertical_page_margin"
-        android:layout_marginEnd="@dimen/horizontal_page_margin"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/horizontal_page_margin"
         android:layout_marginTop="@dimen/vertical_page_margin"
+        android:layout_marginEnd="@dimen/horizontal_page_margin"
+        android:layout_marginBottom="@dimen/vertical_page_margin"
         android:orientation="vertical"
         android:paddingBottom="@dimen/horizontal_page_margin">
 
@@ -41,8 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/buttonbackground"
-            android:paddingEnd="7dp"
             android:paddingStart="7dp"
+            android:paddingEnd="7dp"
             android:text="@string/resource_tint_button" />
 
         <!-- Image -->
@@ -56,6 +57,7 @@
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
+            android:contentDescription="@null"
             android:scaleType="fitXY"
             android:tint="#330000FF" />
 
@@ -121,4 +123,5 @@
             android:max="255" />
 
     </LinearLayout>
+
 </ScrollView>
