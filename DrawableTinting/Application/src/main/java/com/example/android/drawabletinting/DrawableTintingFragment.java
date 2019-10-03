@@ -1,26 +1,27 @@
 /*
-* Copyright 2014 The Android Open Source Project
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright 2014 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.example.android.drawabletinting;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,8 @@ import com.example.android.common.logger.Log;
  * changed from the UI.
  *
  * @see android.graphics.drawable.Drawable#setColorFilter(int, android.graphics.PorterDuff.Mode)
- * @see android.graphics.drawable.Drawable#setTint(android.content.res.ColorStateList, android.graphics.PorterDuff.Mode)
+ * @see android.graphics.drawable.Drawable#setTintList(ColorStateList)
+ * @see android.graphics.drawable.Drawable#setTintMode(PorterDuff.Mode)
  */
 public class DrawableTintingFragment extends Fragment {
 
@@ -59,36 +61,36 @@ public class DrawableTintingFragment extends Fragment {
     private ImageView mImage;
 
     /**
-     * Seekbar for alpha component of tinting color.
+     * SeekBar for alpha component of tinting color.
      */
     private SeekBar mAlphaBar;
     /**
-     * Seekbar for red component of tinting color.
+     * SeekBar for red component of tinting color.
      */
     private SeekBar mRedBar;
     /**
-     * Seekbar for green bar of tinting color.
+     * SeekBar for green bar of tinting color.
      */
     private SeekBar mGreenBar;
     /**
-     * Seekbar for blue bar of tinting color.
+     * SeekBar for blue bar of tinting color.
      */
     private SeekBar mBlueBar;
 
     /**
-     * Text label for alpha component seekbar.
+     * Text label for alpha component SeekBar.
      */
     private TextView mAlphaText;
     /**
-     * Text label for red component seekbar.
+     * Text label for red component SeekBar.
      */
     private TextView mRedText;
     /**
-     * Text label for green component seekbar.
+     * Text label for green component SeekBar.
      */
     private TextView mGreenText;
     /**
-     * Text label for blue component seekbar.
+     * Text label for blue component SeekBar.
      */
     private TextView mBlueText;
 
@@ -162,21 +164,21 @@ public class DrawableTintingFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.tinting_fragment, null);
+        View v = inflater.inflate(R.layout.tinting_fragment, container, false);
 
         // Set a drawable as the image to display
-        mImage = (ImageView) v.findViewById(R.id.image);
+        mImage = v.findViewById(R.id.image);
         mImage.setImageResource(R.drawable.btn_default_normal_holo);
 
-        // Get text labels and seekbars for the four color components: ARGB
-        mAlphaBar = (SeekBar) v.findViewById(R.id.alphaSeek);
-        mAlphaText = (TextView) v.findViewById(R.id.alphaText);
-        mGreenBar = (SeekBar) v.findViewById(R.id.greenSeek);
-        mGreenText = (TextView) v.findViewById(R.id.greenText);
-        mRedBar = (SeekBar) v.findViewById(R.id.redSeek);
-        mRedText = (TextView) v.findViewById(R.id.redText);
-        mBlueText = (TextView) v.findViewById(R.id.blueText);
-        mBlueBar = (SeekBar) v.findViewById(R.id.blueSeek);
+        // Get text labels and SeekBars for the four color components: ARGB
+        mAlphaBar = v.findViewById(R.id.alphaSeek);
+        mAlphaText = v.findViewById(R.id.alphaText);
+        mGreenBar = v.findViewById(R.id.greenSeek);
+        mGreenText = v.findViewById(R.id.greenText);
+        mRedBar = v.findViewById(R.id.redSeek);
+        mRedText = v.findViewById(R.id.redText);
+        mBlueText = v.findViewById(R.id.blueText);
+        mBlueBar = v.findViewById(R.id.blueSeek);
 
         // Set a listener to update tinted image when selections have changed
         mAlphaBar.setOnSeekBarChangeListener(mSeekBarListener);
@@ -184,10 +186,9 @@ public class DrawableTintingFragment extends Fragment {
         mGreenBar.setOnSeekBarChangeListener(mSeekBarListener);
         mBlueBar.setOnSeekBarChangeListener(mSeekBarListener);
 
-
         // Set up the spinner for blend mode selection from a string array resource
-        mBlendSpinner = (Spinner) v.findViewById(R.id.blendSpinner);
-        SpinnerAdapter sa = ArrayAdapter.createFromResource(getActivity(),
+        mBlendSpinner = v.findViewById(R.id.blendSpinner);
+        SpinnerAdapter sa = ArrayAdapter.createFromResource(v.getContext(),
                 R.array.blend_modes, android.R.layout.simple_spinner_dropdown_item);
         mBlendSpinner.setAdapter(sa);
         // Set a listener to update the tinted image when a blend mode is selected
@@ -212,7 +213,7 @@ public class DrawableTintingFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         Log.d(TAG, "state saved.");
         outState.putInt(STATE_BLEND, mBlendSpinner.getSelectedItemPosition());
@@ -266,7 +267,7 @@ public class DrawableTintingFragment extends Fragment {
                 mode.toString()));
 
         // Apply the color tint for the selected tint mode
-        mImage.setColorFilter(mHintColor, mMode);
+        mImage.setColorFilter(color, mMode);
 
         // Update the text for each label with the value of each channel
         mAlphaText.setText(getString(R.string.value_alpha, Color.alpha(color)));
@@ -295,7 +296,7 @@ public class DrawableTintingFragment extends Fragment {
             };
 
     /**
-     * Seekbar listener that updates the tinted color when the progress bar has changed.
+     * SeekBar listener that updates the tinted color when the progress bar has changed.
      */
     private SeekBar.OnSeekBarChangeListener mSeekBarListener =
             new SeekBar.OnSeekBarChangeListener() {
