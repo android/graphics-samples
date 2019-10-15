@@ -275,12 +275,12 @@ public class MediaEffectsFragment extends Fragment implements GLSurfaceView.Rend
     }
 
     private void renderResult() {
-        if (mCurrentEffect != R.id.none) {
+        if (mCurrentEffect == R.id.none) {
             // if no effect is chosen, just render the original bitmap
-            mTexRenderer.renderTexture(mTextures[1]);
+            mTexRenderer.renderTexture(mTextures[0]);
         } else {
             // render the result of applyEffect()
-            mTexRenderer.renderTexture(mTextures[0]);
+            mTexRenderer.renderTexture(mTextures[1]);
         }
     }
 
