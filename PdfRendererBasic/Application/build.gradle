@@ -44,9 +44,9 @@ android {
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
 
-    def lifecycle_version = '2.1.0'
+    def lifecycle_version = '2.2.0'
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-    androidTestImplementation "androidx.arch.core:core-testing:$lifecycle_version"
+    androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
 
     testImplementation 'com.google.truth:truth:0.42'
     testImplementation 'androidx.test:core:1.2.0'

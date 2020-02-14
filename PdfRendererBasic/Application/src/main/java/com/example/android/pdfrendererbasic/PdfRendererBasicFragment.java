@@ -27,7 +27,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 /**
  * This fragment has a big {@link ImageView} that shows PDF pages, and 2
@@ -66,7 +66,7 @@ public class PdfRendererBasicFragment extends Fragment {
         final Button buttonNext = view.findViewById(R.id.next);
 
         // Bind data.
-        mViewModel = ViewModelProviders.of(this).get(PdfRendererBasicViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(PdfRendererBasicViewModel.class);
         final LifecycleOwner viewLifecycleOwner = getViewLifecycleOwner();
         mViewModel.getPageInfo().observe(viewLifecycleOwner, pageInfo -> {
             if (pageInfo == null) {
