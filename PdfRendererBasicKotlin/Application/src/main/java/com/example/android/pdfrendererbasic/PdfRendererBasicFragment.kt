@@ -17,9 +17,7 @@
 package com.example.android.pdfrendererbasic
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
@@ -29,17 +27,9 @@ import androidx.lifecycle.Observer
 /**
  * This fragment has a big [ImageView] that shows PDF pages, and 2 [Button]s to move between pages.
  */
-class PdfRendererBasicFragment : Fragment() {
+class PdfRendererBasicFragment : Fragment(R.layout.pdf_renderer_basic_fragment) {
 
     private val viewModel: PdfRendererBasicViewModel by viewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.pdf_renderer_basic_fragment, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // View references.

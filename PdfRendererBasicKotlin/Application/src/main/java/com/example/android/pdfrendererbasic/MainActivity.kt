@@ -23,8 +23,9 @@ import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.commitNow
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.main_activity) {
 
     companion object {
         const val FRAGMENT_INFO = "info"
@@ -32,11 +33,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, PdfRendererBasicFragment())
-                    .commitNow()
+            supportFragmentManager.commitNow {
+                replace(R.id.container, PdfRendererBasicFragment())
+            }
         }
     }
 
@@ -58,9 +58,9 @@ class MainActivity : AppCompatActivity() {
     class InfoFragment : DialogFragment() {
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             return AlertDialog.Builder(requireContext())
-                    .setMessage(R.string.intro_message)
-                    .setPositiveButton(android.R.string.ok, null)
-                    .show()
+                .setMessage(R.string.intro_message)
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
         }
     }
 
