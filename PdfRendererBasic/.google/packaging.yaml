@@ -7,9 +7,9 @@
 status:       PUBLISHED
 technologies: [Android]
 categories:   [Graphics]
-languages:    [Java]
+languages:    [Kotlin]
 solutions:    [Mobile]
-github:       android/graphics
+github:       android-PdfRendererBasic
 level:        BEGINNER
 icon:         screenshots/icon-web.png
 apiRefs:
