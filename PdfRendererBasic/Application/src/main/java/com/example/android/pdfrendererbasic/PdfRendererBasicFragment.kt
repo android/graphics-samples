@@ -38,9 +38,9 @@ class PdfRendererBasicFragment : Fragment(R.layout.pdf_renderer_basic_fragment) 
         val buttonNext: Button = view.findViewById(R.id.next)
 
         // Bind data.
-        viewModel.pageInfo.observe(viewLifecycleOwner, Observer { (index, count) ->
+        viewModel.pageInfo.observe(viewLifecycleOwner) { (index, count) ->
             activity?.title = getString(R.string.app_name_with_index, index + 1, count)
-        })
+        }
         viewModel.pageBitmap.observe(viewLifecycleOwner, Observer { image.setImageBitmap(it) })
         viewModel.previousEnabled.observe(viewLifecycleOwner, Observer {
             buttonPrevious.isEnabled = it

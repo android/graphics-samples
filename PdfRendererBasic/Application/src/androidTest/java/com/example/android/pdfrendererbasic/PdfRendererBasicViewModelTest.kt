@@ -31,7 +31,9 @@ class PdfRendererBasicViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val viewModel = PdfRendererBasicViewModel(
-            ApplicationProvider.getApplicationContext(), true)
+        ApplicationProvider.getApplicationContext(),
+        true
+    )
 
     @Test
     fun allPages() {
