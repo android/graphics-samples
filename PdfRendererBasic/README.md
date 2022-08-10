@@ -25,12 +25,6 @@ around this by copying the file into the cache directory.
 [4]: https://developer.android.com/reference/android/graphics/pdf/PdfRenderer.Page.html#render(android.graphics.Bitmap,%20android.graphics.Rect,%20android.graphics.Matrix,%20int)
 [5]: https://developer.android.com/reference/android/graphics/pdf/PdfRenderer.Page.html
 
-Pre-requisites
---------------
-
-- Android SDK 27
-- Android Support Repository
-
 Screenshots
 -------------
 

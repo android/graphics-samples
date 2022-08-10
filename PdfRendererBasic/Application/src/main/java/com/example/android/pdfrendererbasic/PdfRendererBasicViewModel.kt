@@ -32,8 +32,8 @@ import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 class PdfRendererBasicViewModel @JvmOverloads constructor(
-        application: Application,
-        useInstantExecutor: Boolean = false
+    application: Application,
+    useInstantExecutor: Boolean = false
 ) : AndroidViewModel(application) {
 
     companion object {

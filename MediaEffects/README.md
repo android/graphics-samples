@@ -18,13 +18,6 @@ For a list of available effects, refer to [EffectsFactory][2].
 [1]: http://developer.android.com/reference/android/media/effect/package-summary.html
 [2]: http://developer.android.com/reference/android/media/effect/EffectFactory.html
 
-Pre-requisites
---------------
-
-- Android SDK 28
-- Android Build Tools v28.0.3
-- Android Support Repository
-
 Screenshots
 -------------
 

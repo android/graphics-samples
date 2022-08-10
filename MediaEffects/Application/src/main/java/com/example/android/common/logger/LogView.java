@@ -20,9 +20,11 @@ import android.content.Context;
 import android.util.*;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatTextView;
+
 /** Simple TextView which is used to output log data received through the LogNode interface.
 */
-public class LogView extends TextView implements LogNode {
+public class LogView extends AppCompatTextView implements LogNode {
 
     public LogView(Context context) {
         super(context);
@@ -92,25 +94,14 @@ public class LogView extends TextView implements LogNode {
 
         // In case this was originally called from an AsyncTask or some other off-UI thread,
         // make sure the update occurs within the UI thread.
-        ((Activity) getContext()).runOnUiThread( (new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // Display the text we just generated within the LogView.
-                appendToLog(outputBuilder.toString());
-            }
+        ((Activity) getContext()).runOnUiThread( (new Thread(() -> {
+            // Display the text we just generated within the LogView.
+            appendToLog(outputBuilder.toString());
         })));
 
         if (mNext != null) {
             mNext.println(priority, tag, msg, tr);
         }
-    }
-
-    public LogNode getNext() {
-        return mNext;
-    }
-
-    public void setNext(LogNode node) {
-        mNext = node;
     }
 
     /** Takes a string and adds to it, with a separator, if the bit to be added isn't null. Since
