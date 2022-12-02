@@ -33,6 +33,9 @@ Getting Started
 This sample uses the Gradle build system. To build this project, use the
 "gradlew build" command or use "Import Project" in Android Studio.
 
+Note that this may not work well with the Android Emulator due to hardware retirements like an HDR
+capable display, so use a device when possible.
+
 Support
 -------
 
