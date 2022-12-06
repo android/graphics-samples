@@ -57,6 +57,5 @@ class TextureViewVideoPlayer : Activity(), SurfaceTextureListener {
 
     override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {
         // Invoked every time there's a new video frame
-        Log.d("test", "Just seeing if this works as intended");
     }
 }

@@ -12,8 +12,8 @@ SurfaceView for most, if not all cases.
 Introduction
 ------------
 
-SurfaceView has been around since the beginning of Android (API 1). SurfaceView is more optimized 
-and gives the ability to display 10-Bit HDR content on supported devices. Other benefits include:
+SurfaceView has been around since the beginning of Android (API 1). Some of the benefits off 
+SurfaceView over TextureView include:
 
 * Better power efficiency
 * 10-Bit HDR Support (dependent on support from the display on the device)
