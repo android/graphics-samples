@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">TextureView to SurfaceView</string>
+    <string name="main_activity_section_one">Individual Players</string>
+    <string name="main_activity_section_two">Multi Players</string>
+    <string name="main_activity_section_three">Recycler SurfaceView</string>
+    <string name="main_activity_texture_view">TextureView VideoPlayer</string>
+    <string name="main_activity_surface_view">SurfaceView VideoPlayer</string>
+    <string name="main_activity_surface_view_hdr">SurfaceView (HLG 10-Bit) VideoPlayer</string>
+    <string name="main_activity_multi_player_view">Multi Player (Non-HDR)</string>
+    <string name="main_activity_multi_player_view_hdr">Multi Player (HDR Content)</string>
+</resources>
