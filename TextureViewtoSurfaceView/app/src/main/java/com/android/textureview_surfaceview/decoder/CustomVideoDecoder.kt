@@ -2,7 +2,6 @@ package com.android.textureview_surfaceview.decoder
 
 import android.content.res.AssetFileDescriptor
 import android.media.MediaCodec
-import android.media.MediaCodecInfo
 import android.media.MediaCodecList
 import android.media.MediaExtractor
 import android.media.MediaExtractor.SEEK_TO_PREVIOUS_SYNC
@@ -28,6 +27,19 @@ class CustomVideoDecoder(
         fun buildWithAssetFile(assetFile: AssetFileDescriptor): CustomVideoDecoder {
             val extractor = MediaExtractor()
             extractor.setDataSource(assetFile)
+            return buildCustomVideoDecoder(extractor)
+        }
+
+        /**
+         * Companion builder object used to construct a [CustomVideoDecoder] using a String path.
+         */
+        fun buildWithFilePath(name: String): CustomVideoDecoder {
+            val extractor = MediaExtractor()
+            extractor.setDataSource(name)
+            return buildCustomVideoDecoder(extractor)
+        }
+
+        private fun buildCustomVideoDecoder(extractor: MediaExtractor): CustomVideoDecoder {
             for (i in 0 until extractor.trackCount) {
                 val format = extractor.getTrackFormat(i)
                 format.getString(MediaFormat.KEY_MIME)?.let {

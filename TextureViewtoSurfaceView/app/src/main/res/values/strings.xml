@@ -8,4 +8,5 @@
     <string name="main_activity_surface_view_hdr">SurfaceView (HLG 10-Bit) VideoPlayer</string>
     <string name="main_activity_multi_player_view">Multi Player (Non-HDR)</string>
     <string name="main_activity_multi_player_view_hdr">Multi Player (HDR Content)</string>
+    <string name="main_activity_multi_player_view_hdr_transformer">Multi Player (HDR Content, Transformed)</string>
 </resources>

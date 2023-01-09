@@ -113,4 +113,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/multi_view_video_players" />
 
+    <Button
+        android:id="@+id/multi_view_video_players_hdr_transformer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/main_activity_multi_player_view_hdr_transformer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/multi_view_video_players_hdr" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
