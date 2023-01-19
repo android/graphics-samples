@@ -31,5 +31,6 @@
         <activity android:name=".examples.single.SurfaceViewVideoPlayerHDR" />
         <activity android:name=".examples.multi.MultiViewVideoPlayer" />
         <activity android:name=".examples.multi.MultiViewVideoPlayerHDR" />
+        <activity android:name=".examples.multi.MultiViewVideoPlayerHDRTransformer" />
     </application>
 </manifest>
