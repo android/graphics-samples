@@ -10,15 +10,16 @@ import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.TextureView
 import android.widget.Toast
+import androidx.media3.common.MediaItem
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.transformer.*
+import androidx.media3.transformer.Transformer.PROGRESS_STATE_NO_TRANSFORMATION
 import com.android.textureview_surfaceview.Constants
 import com.android.textureview_surfaceview.databinding.MultiViewPlayerHdrTransformerBinding
 import com.android.textureview_surfaceview.decoder.CustomVideoDecoder
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.transformer.*
-import com.google.android.exoplayer2.transformer.Transformer.PROGRESS_STATE_NO_TRANSFORMATION
-import com.google.android.exoplayer2.transformer.Transformer.ProgressState
 import java.util.*
 
+@UnstableApi
 class MultiViewVideoPlayerHDRTransformer : Activity(), SurfaceHolder.Callback,
     TextureView.SurfaceTextureListener, Transformer.Listener {
 
@@ -89,7 +90,8 @@ class MultiViewVideoPlayerHDRTransformer : Activity(), SurfaceHolder.Callback,
         val mainHandler = Handler(applicationContext.mainLooper)
         mainHandler.post(object : Runnable {
             override fun run() {
-                val progressState: @ProgressState Int = transformer.getProgress(progressHolder)
+                val progressState: @Transformer.ProgressState Int =
+                    transformer.getProgress(progressHolder)
                 if (progressState != PROGRESS_STATE_NO_TRANSFORMATION) {
                     binding.textureViewTitle.text =
                         "Transformation Progress = ${progressHolder.progress}"
