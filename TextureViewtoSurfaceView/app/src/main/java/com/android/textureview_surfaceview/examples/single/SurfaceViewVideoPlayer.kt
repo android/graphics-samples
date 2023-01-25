@@ -5,10 +5,11 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceHolder
+import androidx.appcompat.app.AppCompatActivity
 import com.android.textureview_surfaceview.Constants
 import com.android.textureview_surfaceview.databinding.SurfaceViewPlayerBinding
 
-open class SurfaceViewVideoPlayer : Activity(), SurfaceHolder.Callback {
+open class SurfaceViewVideoPlayer : AppCompatActivity(), SurfaceHolder.Callback {
     protected lateinit var binding: SurfaceViewPlayerBinding
     private lateinit var mediaPlayer: MediaPlayer
 

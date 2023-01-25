@@ -8,10 +8,11 @@ import android.os.Bundle
 import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.TextureView
+import androidx.appcompat.app.AppCompatActivity
 import com.android.textureview_surfaceview.Constants
 import com.android.textureview_surfaceview.databinding.MultiViewPlayerBinding
 
-class MultiViewVideoPlayer : Activity(), SurfaceHolder.Callback,
+class MultiViewVideoPlayer : AppCompatActivity(), SurfaceHolder.Callback,
     TextureView.SurfaceTextureListener {
 
     private lateinit var binding: MultiViewPlayerBinding

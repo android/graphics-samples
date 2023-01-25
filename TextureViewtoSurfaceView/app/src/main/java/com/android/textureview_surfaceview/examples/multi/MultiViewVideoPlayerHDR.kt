@@ -8,11 +8,12 @@ import android.os.Bundle
 import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.TextureView
+import androidx.appcompat.app.AppCompatActivity
 import com.android.textureview_surfaceview.Constants
 import com.android.textureview_surfaceview.databinding.MultiViewPlayerHdrBinding
 import com.android.textureview_surfaceview.decoder.CustomVideoDecoder
 
-class MultiViewVideoPlayerHDR : Activity() {
+class MultiViewVideoPlayerHDR : AppCompatActivity() {
 
     private lateinit var binding: MultiViewPlayerHdrBinding
     private lateinit var assetFile: AssetFileDescriptor

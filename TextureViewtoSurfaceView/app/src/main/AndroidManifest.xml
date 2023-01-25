@@ -32,5 +32,8 @@
         <activity android:name=".examples.multi.MultiViewVideoPlayer" />
         <activity android:name=".examples.multi.MultiViewVideoPlayerHDR" />
         <activity android:name=".examples.multi.MultiViewVideoPlayerHDRTransformer" />
+        <activity
+            android:name=".examples.verticalpager.HDRVerticalPager"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 </manifest>
