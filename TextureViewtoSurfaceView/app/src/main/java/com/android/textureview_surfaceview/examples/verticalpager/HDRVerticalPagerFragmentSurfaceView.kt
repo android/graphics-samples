@@ -8,12 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.android.textureview_surfaceview.Constants
-import com.android.textureview_surfaceview.databinding.FragmentHdrVerticalPagerBinding
+import com.android.textureview_surfaceview.databinding.FragmentHdrVerticalPagerSurfaceviewBinding
 import com.android.textureview_surfaceview.decoder.CustomVideoDecoder
 
-class HDRVerticalPagerFragment : Fragment(), SurfaceHolder.Callback {
+class HDRVerticalPagerFragmentSurfaceView : Fragment(), HDRVerticalPagerFragmentInterface,
+    SurfaceHolder.Callback {
 
-    private lateinit var binding: FragmentHdrVerticalPagerBinding
+    private lateinit var binding: FragmentHdrVerticalPagerSurfaceviewBinding
     private var decoder: CustomVideoDecoder? = null
     private var asset: AssetFileDescriptor? = null
 
@@ -34,7 +35,7 @@ class HDRVerticalPagerFragment : Fragment(), SurfaceHolder.Callback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHdrVerticalPagerBinding.inflate(layoutInflater)
+        binding = FragmentHdrVerticalPagerSurfaceviewBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -44,11 +45,22 @@ class HDRVerticalPagerFragment : Fragment(), SurfaceHolder.Callback {
         binding.hdrVerticalViewpagerSurfaceView.holder.addCallback(this)
     }
 
+    override fun onResume() {
+        binding.hdrVerticalViewpagerSurfaceView.visibility = View.VISIBLE
+        super.onResume()
+    }
+
+    override fun onPause() {
+        decoder?.stop()
+        binding.hdrVerticalViewpagerSurfaceView.visibility = View.INVISIBLE
+        super.onPause()
+    }
+
     companion object {
         var POSITION_ARG = "position_arg"
 
         @JvmStatic
-        fun newInstance(position: Int) = HDRVerticalPagerFragment().apply {
+        fun newInstance(position: Int) = HDRVerticalPagerFragmentSurfaceView().apply {
             arguments = Bundle().apply {
                 putInt(POSITION_ARG, position)
             }
@@ -68,5 +80,13 @@ class HDRVerticalPagerFragment : Fragment(), SurfaceHolder.Callback {
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         decoder?.stop()
+    }
+
+    override fun setSurfaceViewVisibility(visibility: Boolean) {
+        binding.hdrVerticalViewpagerSurfaceView.visibility =
+            when (visibility) {
+                false -> View.INVISIBLE
+                true -> View.VISIBLE
+            }
     }
 }
