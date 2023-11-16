@@ -10,6 +10,7 @@ import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.TextureView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.transformer.*
@@ -20,7 +21,7 @@ import com.android.textureview_surfaceview.decoder.CustomVideoDecoder
 import java.util.*
 
 @UnstableApi
-class MultiViewVideoPlayerHDRTransformer : Activity(), SurfaceHolder.Callback,
+class MultiViewVideoPlayerHDRTransformer : AppCompatActivity(), SurfaceHolder.Callback,
     TextureView.SurfaceTextureListener, Transformer.Listener {
 
     private lateinit var binding: MultiViewPlayerHdrTransformerBinding
@@ -146,4 +147,3 @@ class MultiViewVideoPlayerHDRTransformer : Activity(), SurfaceHolder.Callback,
         )
     }
 }
-

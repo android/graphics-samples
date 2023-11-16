@@ -10,6 +10,7 @@ import com.android.textureview_surfaceview.examples.multi.MultiViewVideoPlayerHD
 import com.android.textureview_surfaceview.examples.single.SurfaceViewVideoPlayer
 import com.android.textureview_surfaceview.examples.single.SurfaceViewVideoPlayerHDR
 import com.android.textureview_surfaceview.examples.single.TextureViewVideoPlayer
+import com.android.textureview_surfaceview.examples.verticalpager.HDRVerticalPager
 
 class MainActivity : AppCompatActivity() {
 
@@ -52,6 +53,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.multiViewVideoPlayersHdrTransformer.setOnClickListener {
             val intent = Intent(this, MultiViewVideoPlayerHDRTransformer::class.java)
+            startActivity(intent)
+        }
+
+        binding.hdrVerticalViewpagerButton.setOnClickListener {
+            val intent = Intent(this, HDRVerticalPager::class.java)
             startActivity(intent)
         }
     }
