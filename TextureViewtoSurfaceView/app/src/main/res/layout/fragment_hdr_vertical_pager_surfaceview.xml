@@ -7,11 +7,169 @@
     android:background="@color/black"
     tools:context=".examples.verticalpager.HDRVerticalPager">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"/>
+
     <com.android.textureview_surfaceview.views.FixedAspectSurfaceView
         android:id="@+id/hdr_vertical_viewpager_surfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:alpha="0.5"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Boost"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/white"
+            android:layout_marginStart="50dp"/>
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="50dp"
+            android:layout_marginStart="30dp"
+            android:contentDescription="@null"
+            android:elevation="5dp"
+            android:src="@drawable/tiktok_round_white_icon" />
+    </FrameLayout>
+
+    <com.android.textureview_surfaceview.examples.verticalpager.SdrBooster
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1x SDRBoost"
+            android:layout_gravity="bottom|center"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/white"
+            />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="50dp"
+            android:contentDescription="@null"
+            android:elevation="5dp"
+            android:src="@drawable/tiktok_round_white_icon" />
+    </com.android.textureview_surfaceview.examples.verticalpager.SdrBooster>
+
+    <com.android.textureview_surfaceview.examples.verticalpager.SdrBooster3x
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3x SDRBoost"
+            android:layout_gravity="bottom|end"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/white"
+            android:layout_marginEnd="40dp"/>
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="50dp"
+            android:layout_marginEnd="30dp"
+            android:contentDescription="@null"
+            android:elevation="5dp"
+            android:src="@drawable/tiktok_round_white_icon" />
+    </com.android.textureview_surfaceview.examples.verticalpager.SdrBooster3x>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Boost"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:layout_marginBottom="170dp"
+            android:textColor="@color/white"
+            android:layout_marginStart="50dp"/>
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="200dp"
+            android:layout_marginStart="30dp"
+            android:contentDescription="@null"
+            android:elevation="5dp"
+            android:src="@drawable/tiktok_master_icon" />
+    </FrameLayout>
+
+    <com.android.textureview_surfaceview.examples.verticalpager.SdrBooster
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1x SDRBoost"
+            android:layout_gravity="bottom|center"
+            android:gravity="center"
+            android:layout_marginBottom="170dp"
+            android:textColor="@color/white"
+            />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="200dp"
+            android:contentDescription="@null"
+            android:elevation="5dp"
+            android:src="@drawable/tiktok_master_icon" />
+    </com.android.textureview_surfaceview.examples.verticalpager.SdrBooster>
+
+    <com.android.textureview_surfaceview.examples.verticalpager.SdrBooster3x
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3x SDRBoost"
+            android:layout_gravity="bottom|end"
+            android:gravity="center"
+            android:layout_marginBottom="170dp"
+            android:textColor="@color/white"
+            android:layout_marginEnd="40dp"/>
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="200dp"
+            android:layout_marginEnd="30dp"
+            android:contentDescription="@null"
+            android:elevation="5dp"
+            android:src="@drawable/tiktok_master_icon" />
+    </com.android.textureview_surfaceview.examples.verticalpager.SdrBooster3x>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

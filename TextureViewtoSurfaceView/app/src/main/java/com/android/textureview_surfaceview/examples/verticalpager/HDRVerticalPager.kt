@@ -1,5 +1,7 @@
 package com.android.textureview_surfaceview.examples.verticalpager
 
+import android.content.pm.ActivityInfo
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +18,10 @@ class HDRVerticalPager : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = HdrVerticalPagerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            window.colorMode = ActivityInfo.COLOR_MODE_HDR
+        };
 
         /// Set up view pager & adapter
         setUpViewPager2()
