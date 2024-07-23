@@ -7,10 +7,9 @@
     android:background="@color/black"
     tools:context=".examples.verticalpager.HDRVerticalPager">
 
-    <FrameLayout
+    <com.android.textureview_surfaceview.examples.verticalpager.ColorDrawOverlay
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"/>
+        android:layout_height="match_parent"/>
 
     <com.android.textureview_surfaceview.views.FixedAspectSurfaceView
         android:id="@+id/hdr_vertical_viewpager_surfaceView"
@@ -124,17 +123,6 @@
     <com.android.textureview_surfaceview.examples.verticalpager.SdrBooster
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1x SDRBoost"
-            android:layout_gravity="bottom|center"
-            android:gravity="center"
-            android:layout_marginBottom="170dp"
-            android:textColor="@color/white"
-            />
 
         <ImageView
             android:layout_width="100dp"

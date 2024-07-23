@@ -35,19 +35,19 @@ class SdrBooster3x(context: Context, attrs: AttributeSet?) : FrameLayout(context
     override fun accept(display: Display) {
         hdrSdrRatio = display.hdrSdrRatio
 
-        if (hdrSdrRatio > 1.0f) {
-            val scale = 3.0f + ((hdrSdrRatio - 1.0f) * .1f)
-            paint.colorFilter = ColorMatrixColorFilter(
-                floatArrayOf(
-                    scale, 0f, 0f, 0f, 0f,
-                    0f, scale, 0f, 0f, 0f,
-                    0f, 0f, scale, 0f, 0f,
-                    0f, 0f, 0f, 1f, 0f
-                )
-            )
-            setLayerType(LAYER_TYPE_HARDWARE, paint)
-        } else {
-            setLayerType(LAYER_TYPE_NONE, null)
-        }
+//        if (hdrSdrRatio > 1.0f) {
+//            val scale = 3.0f + ((hdrSdrRatio - 1.0f) * .1f)
+//            paint.colorFilter = ColorMatrixColorFilter(
+//                floatArrayOf(
+//                    scale, 0f, 0f, 0f, 0f,
+//                    0f, scale, 0f, 0f, 0f,
+//                    0f, 0f, scale, 0f, 0f,
+//                    0f, 0f, 0f, 1f, 0f
+//                )
+//            )
+//            setLayerType(LAYER_TYPE_HARDWARE, paint)
+//        } else {
+//            setLayerType(LAYER_TYPE_NONE, null)
+//        }
     }
 }
