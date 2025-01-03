@@ -20,4 +20,9 @@
         <item name="colorPrimaryDark">#D32F2F</item>
         <item name="colorAccent">#00BCD4</item>
     </style>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#F44336</item>
+        <item name="colorPrimaryDark">#D32F2F</item>
+        <item name="colorAccent">#00BCD4</item>
+    </style>
 </resources>
