@@ -29,11 +29,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: set up JDK 11
+      - name: Set Up JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: 11
+          java-version: '17'
+          cache: 'gradle'
 
       - name: Generate cache key
         run: .github/scripts/checksum.sh checksum.txt
